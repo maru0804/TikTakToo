@@ -32,7 +32,7 @@ char Boad::geter(int i,int j){
 }
 void Boad::drow()
 {
-    // system("clear");
+    system("clear");
     cout << "Game ver 1.0" << endl;
     for(int i = 0;i < 3; i++){
         for(int j = 0;j < 3; j++){
@@ -65,6 +65,7 @@ int score(Boad& boads, int depth);
 
 int main(){
     int a, win,cnt=0;
+    char hand;
     cout << "先攻後攻の選択(先攻 > 1 : 後攻 > 2) > ";
     cin >> a;
     if(a == 1){
@@ -73,17 +74,31 @@ int main(){
         turn = cpu;
     }
     Boad boad;
+    boad.drow();
     while(true){
-        input(boad, turn);
-        // cout << boad.geter(0,0) << endl;
-        boad.drow();
-        win = jadge(boad,turn);
-        if(win == 1){
-            cout << turn << " "<<"win this game!" << endl;
-            break;
+        if(turn == player){
+            input(boad, turn);
+            boad.drow();
+            win = jadge(boad,turn);
+            if(win == 1){
+                cout << "you win this game!" << endl;
+                break;
+            }
+            changep(turn);
+            cnt ++;
+        }else{
+            hand = minmax(boad);
+            boad.set(hand,turn);
+            boad.drow();
+            win = jadge(boad,turn);
+            if(win == 1){
+                cout << "you lose this game!" << endl;
+                break;
+            }
+            changep(turn);
+            cnt ++;
         }
-        changep(turn);
-        cnt ++;
+        
         if(cnt == 9){
             cout << "DLOW ..." << endl;
             break;
