@@ -1,4 +1,5 @@
 #include<iostream>
+#include<vector>
 
 using namespace std;
 
@@ -53,12 +54,13 @@ void Boad::set(char hand, char turn)
     else if(hand == '9'){matrix[2][2] = turn;}
 }
 
-int max(char hand, Boad& boad);
-int min(char hand);
-char minmax();
+int max(Boad& sboad, int depth);
+int min(Boad& sboad, int depth);
+char minmax(Boad& boad);
 void input(Boad& boad, char turn);
 void changep(char& turn);
 int jadge(Boad& boad, char turn);
+int score(Boad& boads, int depth);
 
 
 int main(){
@@ -91,13 +93,99 @@ int main(){
     cout << "sccess" << endl;
     return 0;
 }
-int max(char hand, Boad& boad){
+char minmax(Boad& boad){
+    
+    vector<char> hands;
+    int val,val_max = -1,depth=1;
+    char hand;
+    
+    // 入力可能な場所の配列handsを作成
     for(int i=0;i<3;i++){
         for(int j=0;j<3;j++){
             if(boad.geter(i,j)!='O' && boad.geter(i,j)!='X'){
-                // min max 
+                hands.push_back(boad.geter(i,j));
             }
         }
+    }
+    // 全ての可能な手に対してmin,maxを試行する
+    for(int i=0;i<hands.size();i++){
+        Boad sboad;
+        sboad = boad;
+        sboad.set(hands[i],'X');
+
+        val = min(sboad,depth);
+        if(val>val_max){
+            val = val_max;
+            hand = hands[i];
+        }
+    }
+    return hand;
+}
+int max(Boad& sboad, int depth){
+    if(score(sboad,depth) == 0){
+        depth ++;
+    }else{
+        return score(sboad,depth);
+    }
+    vector<char> hands;
+     // 入力可能な場所の配列handsを作成
+    for(int i=0;i<3;i++){
+        for(int j=0;j<3;j++){
+            if(sboad.geter(i,j)!='O' && sboad.geter(i,j)!='X'){
+                hands.push_back(sboad.geter(i,j));
+            }
+        }
+    }
+    // 全ての可能な手に対してmin,maxを試行する
+    int val,val_max = -1;
+    for(int i=0;i<hands.size();i++){
+        Boad ssboad;
+        ssboad = sboad;
+        ssboad.set(hands[i],'X');
+
+        val = min(ssboad,depth);
+        if(val>val_max){
+            val = val_max;
+        }
+    }
+    return val_max;
+}
+int min(Boad& sboad, int depth){
+    if(score(sboad,depth) == 0){
+        depth ++;
+    }else{
+        return score(sboad,depth);
+    }
+    vector<char> hands;
+     // 入力可能な場所の配列handsを作成
+    for(int i=0;i<3;i++){
+        for(int j=0;j<3;j++){
+            if(sboad.geter(i,j)!='O' && sboad.geter(i,j)!='X'){
+                hands.push_back(sboad.geter(i,j));
+            }
+        }
+    }
+    // 全ての可能な手に対してmin,maxを試行する
+    int val,val_min = 10;
+    for(int i=0;i<hands.size();i++){
+        Boad ssboad;
+        ssboad = sboad;
+        ssboad.set(hands[i],'O');
+
+        val = min(ssboad,depth);
+        if(val<val_min){
+            val = val_min;
+        }
+    }
+    return val_min;
+}
+int score(Boad& boad, int depth){
+    if(jadge(boad,'O') == 1){
+        return depth - 10;
+    }else if(jadge(boad,'X') == 1){
+        return 10 - depth;
+    }else{
+        return 0;
     }
 }
 void changep(char& turn){
