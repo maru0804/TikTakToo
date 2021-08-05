@@ -4,6 +4,7 @@ TikTakToo(三目並べ)
 
 C++とMinMax法で最強の三目並べAIを作成しました（予定）
 
+(注)開発をする際はブランチを切って行う
 ***
 ## player vs player
 
@@ -12,7 +13,7 @@ C++とMinMax法で最強の三目並べAIを作成しました（予定）
 ## player vs cpu
 
     player vs cpuのプログラム
- 
+
 ## Requirement
 
 動作確認済みの環境
