@@ -1,20 +1,9 @@
 #include<iostream>
 #include<vector>
+#include "boad.h"
 
 using namespace std;
 
-char player='O',cpu='X',turn;
-
-class Boad
-{
-    private:
-        char matrix[3][3]; 
-    public:
-        Boad();
-        void drow();
-        void set(char hand,char turn);
-        char geter(int i,int j);
-};
 Boad::Boad()
 {
     matrix[0][0]='1';
@@ -54,60 +43,6 @@ void Boad::set(char hand, char turn)
     else if(hand == '9'){matrix[2][2] = turn;}
 }
 
-int max(Boad& sboad, int depth);
-int min(Boad& sboad, int depth);
-char minmax(Boad& boad);
-void input(Boad& boad, char turn);
-void changep(char& turn);
-int jadge(Boad& boad, char turn);
-int score(Boad& boads, int depth);
-
-
-int main(){
-    int a, win,cnt=0;
-    char hand;
-    cout << "先攻後攻の選択(先攻 > 1 : 後攻 > 2) > ";
-    cin >> a;
-    if(a == 1){
-        turn = player;
-    }else{
-        turn = cpu;
-    }
-    Boad boad;
-    boad.drow();
-    while(true){
-        if(turn == player){
-            input(boad, turn);
-            boad.drow();
-            win = jadge(boad,turn);
-            if(win == 1){
-                cout << "you win this game!" << endl;
-                break;
-            }
-            changep(turn);
-            cnt ++;
-        }else{
-            hand = minmax(boad);
-            boad.set(hand,turn);
-            boad.drow();
-            win = jadge(boad,turn);
-            if(win == 1){
-                cout << "you lose this game!" << endl;
-                break;
-            }
-            changep(turn);
-            cnt ++;
-        }
-        
-        if(cnt == 9){
-            cout << "DLOW ..." << endl;
-            break;
-        }
-    }
-    
-    cout << "sccess" << endl;
-    return 0;
-}
 char minmax(Boad& boad){
     
     vector<char> hands;
@@ -151,7 +86,7 @@ int max(Boad& sboad, int depth){
             }
         }
     }
-    // 全ての可能な手に対してmin,maxを試行する
+    // 全ての可能な手に対してmaxを探索
     int val,val_max = -1;
     for(int i=0;i<hands.size();i++){
         Boad ssboad;
@@ -180,7 +115,7 @@ int min(Boad& sboad, int depth){
             }
         }
     }
-    // 全ての可能な手に対してmin,maxを試行する
+    // 全ての可能な手に対してminを探索
     int val,val_min = 10;
     for(int i=0;i<hands.size();i++){
         Boad ssboad;
